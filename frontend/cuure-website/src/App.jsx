@@ -1,7 +1,15 @@
-import ContactForm from "./Landing/Contact";
+import Appointment from "./components/BookingForm/Appointment";
+import BookingForm from "./components/BookingForm/Booking";
 
 function App() {
-  return <ContactForm />;
+  return( 
+    <>
+  
+  
+  <Appointment />;
+  </>
+  );
+  
 }
 
 export default App;
