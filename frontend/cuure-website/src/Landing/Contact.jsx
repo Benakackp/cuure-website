@@ -15,6 +15,7 @@ export default function Contact() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [bookedSlots, setBookedSlots] = useState([]);
 
   const doctors = [
     "Dr. Sharma",
@@ -53,14 +54,49 @@ export default function Contact() {
     return `${years}Y ${months}M`;
   };
 
+  const fetchBookedSlots = async (doctor, date) => {
+
+    if (!doctor || !date) return;
+
+    try {
+
+      const res = await axios.get(
+        "http://localhost:3000/api/booked-slots",
+        {
+          params: {
+            doctor_name: doctor,
+            date: date
+          }
+        }
+      );
+
+      if (res.data.success) {
+        setBookedSlots(res.data.data);
+      }
+
+    } catch (err) {
+      console.error("Failed to fetch slots");
+    }
+
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
     if (name === "dob") {
       const age = calculateAge(value);
       setForm({ ...form, dob: value, age });
-    } else {
-      setForm({ ...form, [name]: value });
+    } 
+    else {
+      const newForm = { ...form, [name]: value };
+      setForm(newForm);
+
+      if (name === "doctor_name" || name === "date") {
+        fetchBookedSlots(
+          name === "doctor_name" ? value : newForm.doctor_name,
+          name === "date" ? value : newForm.date
+        );
+      }
     }
   };
 
@@ -75,15 +111,6 @@ export default function Contact() {
     setLoading(true);
 
     try {
-      console.log("Sending data:", {
-  patient_name: form.patient_name,
-  age: form.age,
-  phone: form.phone,
-  date: form.date,
-  time_value: form.time_value,
-  doctor_name: form.doctor_name,
-  address: form.address
-});
       await axios.post("http://localhost:3000/api/book-appointment", {
         patient_name: form.patient_name,
         age: form.age,
@@ -225,7 +252,9 @@ export default function Contact() {
             required
           >
             <option value="">Select Time</option>
-            {timeSlots.map((slot, index) => (
+            {timeSlots
+            .filter(slot => !bookedSlots.includes(slot))
+            .map((slot, index) => (
               <option key={index} value={slot}>
                 {slot}
               </option>

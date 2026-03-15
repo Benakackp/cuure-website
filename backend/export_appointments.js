@@ -11,6 +11,7 @@ db.all(
   `SELECT
       id,
       phone,
+      age,v 
       patient_name,
       date,
       time_label,

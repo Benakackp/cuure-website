@@ -94,7 +94,7 @@
                 </tr>
               </thead>
               <tbody id="appt-tbody">
-                <tr><td colspan="8" class="loading">Loading...</td></tr>
+                <tr><td colspan="10" class="loading">Loading...</td></tr>
               </tbody>
             </table>
           </div>
@@ -396,8 +396,8 @@
       function exportAppointments() {
         if (!appointmentsData.length) return alert('No data to export');
         const csv = [
-          ['ID', 'Patient', 'Phone', 'Date', 'Time', 'Doctor', 'Address'].join(','),
-          ...appointmentsData.map(a => [a.id, a.patient_name, a.phone, a.date, a.time_label, a.doctor_name, a.address].map(v => `"${v || ''}"`).join(','))
+          ['ID', 'Patient','age', 'Phone', 'Date', 'Time', 'Doctor', 'Address'].join(','),
+          ...appointmentsData.map(a => [a.id, a.patient_name,a.age, a.phone, a.date, a.time_label, a.doctor_name, a.address].map(v => `"${v || ''}"`).join(','))
         ].join('\n');
         const a = document.createElement('a');
         a.href = 'data:text/csv,' + encodeURIComponent(csv);
