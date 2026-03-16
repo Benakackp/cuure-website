@@ -1,0 +1,282 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#contact {
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  background: #0b1f3a;
+  color: #1a2e4a;
+}
+
+/* ── Top Nav Bar ── */
+.appt-nav {
+  background: #0b1f3a;
+  padding: 14px 40px;
+  display: flex;
+  align-items: center;
+}
+
+.appt-nav-badge {
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+/* ── Hero Header ── */
+.appt-hero {
+  background: #0b1f3a;
+  padding: 40px 40px 48px;
+}
+
+.appt-hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 52px;
+  line-height: 1.1;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.appt-hero h1 span {
+  color: #4b9fe4;
+}
+
+.appt-hero p {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 14px;
+  font-weight: 300;
+}
+
+/* ── Body Layout ── */
+.appt-body {
+  position: relative;
+  background: url('https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?auto=format&fit=crop&w=1400&q=80')
+    center / cover no-repeat;
+  padding: 48px 40px 80px;
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.appt-body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 22, 40, 0.6);
+}
+
+/* ── Form Card ── */
+.appt-form-card {
+  position: relative;
+  z-index: 1;
+  background: #fff;
+  border-radius: 18px;
+  padding: 38px 40px;
+  width: 580px;
+  flex-shrink: 0;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
+}
+
+.appt-form-card h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 26px;
+  color: #1a2e4a;
+  margin-bottom: 6px;
+}
+
+.appt-form-card .appt-subtitle {
+  font-size: 13px;
+  color: #4b9fe4;
+  margin-bottom: 28px;
+  font-weight: 400;
+}
+
+/* ── Form Grid ── */
+.appt-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.appt-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.appt-field.full {
+  grid-column: 1 / -1;
+}
+
+.appt-field label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #1a4fa0;
+}
+
+.appt-field label .req {
+  color: #e53e3e;
+  margin-left: 2px;
+}
+
+.appt-field input,
+.appt-field select,
+.appt-field textarea {
+  padding: 11px 14px;
+  border-radius: 8px;
+  border: 1.5px solid #e2e8f0;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #1a2e4a;
+  background: #f7faff;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  appearance: none;
+}
+
+.appt-field input::placeholder,
+.appt-field select::placeholder,
+.appt-field textarea::placeholder {
+  color: #a0aec0;
+}
+
+.appt-field input:focus,
+.appt-field select:focus,
+.appt-field textarea:focus {
+  border-color: #4b9fe4;
+  box-shadow: 0 0 0 3px rgba(75, 159, 228, 0.15);
+  background: #fff;
+}
+
+.appt-field input[readonly] {
+  background: #edf2f7;
+  color: #718096;
+  cursor: default;
+}
+
+.appt-field textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+/* ── Select Wrapper ── */
+.appt-select-wrap {
+  position: relative;
+}
+
+.appt-select-wrap select {
+  width: 100%;
+  cursor: pointer;
+}
+
+.appt-select-wrap::after {
+  content: '▾';
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #4b9fe4;
+  pointer-events: none;
+  font-size: 13px;
+}
+
+/* ── Submit Button ── */
+.appt-submit {
+  width: 100%;
+  margin-top: 24px;
+  padding: 15px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #1a4fa0 0%, #4b9fe4 100%);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: opacity 0.2s, transform 0.15s;
+  box-shadow: 0 4px 18px rgba(26, 79, 160, 0.35);
+}
+
+.appt-submit:hover:not(:disabled) {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.appt-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* ── Side Info Cards ── */
+.appt-side {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  flex-shrink: 0;
+  padding-top: 8px;
+  width:15rem;
+  padding-left: 3rem;
+}
+
+.appt-info-card {
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 14px;
+  padding: 22px 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(4px);
+}
+
+.appt-info-card .ic-icon {
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+.appt-info-card h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 16px;
+  color: #1a2e4a;
+  margin-bottom: 6px;
+}
+
+.appt-info-card p {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.55;
+  font-weight: 300;
+}
+
+/* ── Loading Spinner ── */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.appt-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}

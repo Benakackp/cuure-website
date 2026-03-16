@@ -1,12 +1,12 @@
-import Appointment from "./components/BookingForm/Appointment";
-import BookingForm from "./components/BookingForm/Booking";
+import Contact from "./Contact/Contact";
+
 
 function App() {
   return( 
     <>
   
   
-  <Appointment />;
+  <Contact />;
   </>
   );
   
