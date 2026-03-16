@@ -13,7 +13,7 @@ router.get("/appointments", async (req, res) => {
         a.id,
         a.patient_name,
         a.phone,
-        u.age,
+        COALESCE(u.age::text, a.age) AS age,
         a.date,
         a.time_label,
         a.time_value,

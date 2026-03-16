@@ -80,4 +80,42 @@ router.post("/book-appointment", async (req, res) => {
   }
 });
 
+/* ===============================
+   GET BOOKED SLOTS
+================================ */
+router.get("/booked-slots", async (req, res) => {
+
+  const { doctor_name, date } = req.query;
+
+  if (!doctor_name || !date) {
+    return res.json({ success: true, data: [] });
+  }
+
+  try {
+
+    const result = await pool.query(
+      `
+      SELECT time_value
+      FROM appointments
+      WHERE doctor_name = $1
+      AND date = $2
+      `,
+      [doctor_name, date]
+    );
+
+    res.json({
+      success: true,
+      data: result.rows.map(r => r.time_value)
+    });
+
+  } catch (err) {
+    console.error("Slot fetch error:", err);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch booked slots"
+    });
+  }
+
+});
+
 module.exports = router;
