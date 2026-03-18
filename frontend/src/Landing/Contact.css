@@ -1,0 +1,210 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+/* RESET */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  width: 100%;
+  overflow-x: hidden;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* HERO */
+.appt-hero {
+  max-width: 1300px;
+  margin: auto;
+  padding: 50px 20px;
+}
+
+.appt-hero h1 {
+  font-family: 'DM Serif Display';
+  font-size: 52px;
+  color: #fff;
+}
+
+.appt-hero span {
+  color: #4b9fe4;
+}
+
+.appt-hero p {
+  color: rgba(255,255,255,0.7);
+  margin-top: 8px;
+  font-size: 16px;
+}
+
+/* BACKGROUND */
+.appt-body {
+  position: relative;
+  background: url('https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?auto=format&fit=crop&w=1400&q=80')
+    center/cover no-repeat;
+  padding: 80px 20px;
+}
+
+/* overlay */
+.appt-body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(10,22,40,0.6);
+}
+
+/* CONTAINER */
+.appt-container {
+  position: relative;
+  z-index: 2;
+
+  max-width: 1300px;
+  margin: auto;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+/* FORM CARD */
+.appt-form-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 45px;
+
+  width: 100%;
+  max-width: 850px;
+
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+
+.appt-form-card h2 {
+  font-family: 'DM Serif Display';
+  font-size: 30px;
+}
+
+.appt-subtitle {
+  color: #4b9fe4;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+/* GRID */
+.appt-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.appt-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.appt-field.full {
+  grid-column: 1 / -1;
+}
+
+.appt-field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1a4fa0;
+}
+
+.appt-field input[type="date"] {
+  color-scheme: light;
+}
+
+.appt-field input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
+/* INPUTS */
+.appt-field input,
+.appt-field select,
+.appt-field textarea {
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #f7faff;
+  color: #000; /* 🔥 BLACK TEXT */
+  font-size: 16px;
+}
+
+.appt-field input::placeholder,
+.appt-field textarea::placeholder {
+  color: #666;
+}
+
+.appt-field textarea {
+  min-height: 100px;
+}
+
+/* BUTTON */
+.appt-submit {
+  margin-top: 24px;
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg,#1a4fa0,#4b9fe4);
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* SIDE */
+.appt-side {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 300px;
+}
+
+/* CARDS */
+.appt-info-card {
+  background: #fff;
+  padding: 28px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.appt-info-card h3 {
+  font-family: 'DM Serif Display';
+  color:#000;
+  font-size: 18px;
+}
+
+.appt-info-card p {
+  font-size: 14px;
+  color: #64748b;
+}
+
+/* 📱 MOBILE */
+@media (max-width: 900px) {
+
+  .appt-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .appt-form-card {
+    max-width: 100%;
+    padding: 30px;
+  }
+
+  .appt-side {
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .appt-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .appt-hero h1 {
+    font-size: 36px;
+  }
+}
