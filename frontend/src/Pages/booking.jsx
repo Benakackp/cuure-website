@@ -25,7 +25,7 @@ export default function Booking() {
     "02:00 PM", "02:30 PM", "03:00 PM", "03:30 PM",
   ];
 
-  // ✅ SAME LOGIC
+  // Calculate age
   const calculateAge = (dob) => {
     const birthDate = new Date(dob);
     const today = new Date();
@@ -41,7 +41,7 @@ export default function Booking() {
     return `${years}Y ${months}M`;
   };
 
-  // ✅ SAME API
+  // Fetch API
   const fetchBookedSlots = async (doctor, date) => {
     if (!doctor || !date) return;
 
@@ -61,7 +61,7 @@ export default function Booking() {
     }
   };
 
-  // ✅ SAME LOGIC
+  // DOB
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -81,7 +81,7 @@ export default function Booking() {
     }
   };
 
-  // ✅ SAME API CALL
+  // Phone
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -189,10 +189,36 @@ export default function Booking() {
 
               <div className="appt-field">
                 <label>Phone *</label>
+                {/* <input
+                  name="phone"
+                  value={form.phone}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, ""); // only numbers
+                    if (value.length <= 10) {
+                      setForm({ ...form, phone: value });
+                    }
+                  }}
+                  placeholder="Phone (10 digits)"
+                  required
+                /> */}
+
+                {/* For extra Sounds */}
                 <input
                   name="phone"
                   value={form.phone}
                   onChange={handleChange}
+                  onInput={(e) => {
+                    let value = e.target.value.replace(/\D/g, "");
+                    if (value.length > 10) {
+                      // 🔊 play sound
+                      const audio = new Audio("/Sounds/phone.mp3");
+                      audio.play();
+                      // cut back to 10 digits
+                      value = value.slice(0, 10);
+                    }
+                    e.target.value = value;
+                  }}
+                  placeholder="Phone (10 digits)"
                   required
                 />
               </div>
