@@ -1,7 +1,7 @@
-import ContactForm from "./Landing/Contact";
+import Booking from "./Pages/booking";
 
 function App() {
-  return <ContactForm />;
+  return <Booking />;
 }
 
 export default App;

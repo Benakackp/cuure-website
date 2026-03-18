@@ -1,8 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
-import "./Contact.css";
+import "./booking.css";
 
-export default function Contact() {
+export default function Booking() {
   const [form, setForm] = useState({
     patient_name: "",
     dob: "",
@@ -153,7 +153,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact">
+    <section id="booking">
 
 
       {/* HERO */}
