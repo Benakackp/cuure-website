@@ -8,25 +8,26 @@ const { pool, appointmentsCache } = require("../config/db");
 ================================ */
 router.get("/appointments", async (req, res) => {
   try {
-    const result = await pool.query(
-      `SELECT 
-        a.id,
-        a.patient_name,
-        a.phone,
-        COALESCE(u.age::text, a.age) AS age,
-        a.date,
-        a.time_label,
-        a.time_value,
-        a.address,
-        a.location_link,
-        a.doctor_name,
-        a.doctor_specialization,
-        a.source,
-        'Booked' AS status
-      FROM appointments a
-      LEFT JOIN users u ON u.phone = a.phone
-      ORDER BY a.created_at DESC`
-    );
+    const result = await pool.query(`
+  SELECT 
+    a.id,
+    a.patient_name,
+    a.phone,
+    a.age AS age,
+    a.email,
+    a.date,
+    a.time_label,
+    a.time_value,
+    a.address,
+    a.location_link,
+    a.doctor_name,
+    a.doctor_specialization,
+    a.source,
+    'Booked' AS status
+  FROM appointments a
+  LEFT JOIN users u ON u.phone = a.phone
+  ORDER BY a.created_at DESC
+`);
 
     res.json({ success: true, data: result.rows });
   } catch (err) {
@@ -48,6 +49,7 @@ router.post("/appointments", async (req, res) => {
     phone,
     patient_name,
     age,
+    email,
     date,
     time_label,
     time_value,
@@ -127,6 +129,7 @@ router.post("/appointments", async (req, res) => {
       INSERT INTO appointments (
         phone,
         patient_name,
+        email,
         date,
         time_label,
         time_value,
@@ -135,12 +138,13 @@ router.post("/appointments", async (req, res) => {
         doctor_name,
         doctor_specialization
       )
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
       RETURNING id
       `,
       [
         phone,
         patient_name,
+        email,
         date,
         time_label || time_value,
         time_value,
@@ -184,6 +188,7 @@ router.get("/payments", async (req, res) => {
       `SELECT
         id,
         appointment_id,
+        email,
         doctor_name,
         patient_name,
         patient_phone,
@@ -213,6 +218,7 @@ router.post("/payments", async (req, res) => {
     appointment_id,
     doctor_name,
     patient_name,
+    email,
     patient_phone,
     amount,
     payment_link,
@@ -232,6 +238,7 @@ router.post("/payments", async (req, res) => {
         appointment_id,
         doctor_name,
         patient_name,
+        email,
         patient_phone,
         amount,
         payment_link,

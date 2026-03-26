@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const { pool } = require("../config/db");
+const { sendAppointmentMail } = require("../utils/mailer");
+
 
 router.post("/book-appointment", async (req, res) => {
   console.log("DB URL:", process.env.DATABASE_URL);
@@ -8,6 +10,7 @@ router.post("/book-appointment", async (req, res) => {
   let {
     phone,
     patient_name,
+    email,
     age,
     date,
     time_value,
@@ -40,27 +43,17 @@ router.post("/book-appointment", async (req, res) => {
 
   try {
     await pool.query(
-      `
-      INSERT INTO appointments (
-        phone,
-        patient_name,
-        age,
-        date,
-        time_label,
-        time_value,
-        address,
-        doctor_name,
-        doctor_specialization,
-        source
-      )
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
-      `,
+
+      `INSERT INTO appointments 
+      (phone, patient_name, age, email, date, time_label, time_value, address, doctor_name, doctor_specialization, source)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11);`,
       [
         phone,
         patient_name,
-        age,
+        age || null,
+        email || null,
         date,
-        time_label || time_value,
+        time_value, // use same for label
         time_value,
         address || null,
         doctor_name,
@@ -68,6 +61,15 @@ router.post("/book-appointment", async (req, res) => {
         "WEBSITE"
       ]
     );
+
+    await sendAppointmentMail({
+        email,
+        patient_name,
+        date,
+        time: time_value,
+        doctor: doctor_name
+      })
+
 
     res.json({ success: true });
 

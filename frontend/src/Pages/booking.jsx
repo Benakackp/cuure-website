@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import "./booking.css";
 
@@ -7,6 +7,7 @@ export default function Booking() {
     patient_name: "",
     dob: "",
     age: "",
+    email: "",
     phone: "",
     date: "",
     time_value: "",
@@ -41,7 +42,7 @@ export default function Booking() {
     return `${years}Y ${months}M`;
   };
 
-  // Fetch API
+  // Fetch booked slots
   const fetchBookedSlots = async (doctor, date) => {
     if (!doctor || !date) return;
 
@@ -61,7 +62,7 @@ export default function Booking() {
     }
   };
 
-  // DOB
+  // Handle change
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -81,7 +82,7 @@ export default function Booking() {
     }
   };
 
-  // Phone
+  // Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -98,6 +99,7 @@ export default function Booking() {
         {
           patient_name: form.patient_name,
           age: form.age,
+          email: form.email, // ✅ added
           phone: form.phone,
           date: form.date,
           time_value: form.time_value,
@@ -112,6 +114,7 @@ export default function Booking() {
         patient_name: "",
         dob: "",
         age: "",
+        email: "",
         phone: "",
         date: "",
         time_value: "",
@@ -127,18 +130,15 @@ export default function Booking() {
     setLoading(false);
   };
 
-  // Time slot 
+  // Available slots
   const getAvailableTimeSlots = () => {
-  const now = new Date();
+    const now = new Date();
 
     return timeSlots.filter(slot => {
-
-      // If selected date is not today → allow all
       if (form.date !== now.toISOString().split("T")[0]) {
         return true;
       }
 
-      // Convert slot time to Date
       const [time, modifier] = slot.split(" ");
       let [hours, minutes] = time.split(":").map(Number);
 
@@ -152,169 +152,167 @@ export default function Booking() {
     });
   };
 
+  useEffect(() => {
+  const saved = localStorage.getItem("cuure_user");
+
+  if (saved) {
+    const data = JSON.parse(saved);
+
+    setForm(prev => ({
+      ...prev,
+      patient_name: data.patient_name || "",
+      phone: data.phone || "",
+      email: data.email || ""
+      // ❌ address NOT included
+    }));
+  }
+}, []);
+
   return (
     <section id="booking">
 
-
-      {/* HERO */}
       <div className="appt-hero">
         <h1>Book Your <span>Appointment</span></h1>
         <p>Schedule a in-person consultation with our expert doctors at your Home.</p>
       </div>
 
-      {/* BODY */}
       <div className="appt-body">
         <div className="appt-container">
-          {/* form + side */}
 
-        {/* FORM */}
-        <div className="appt-form-card">
-          <h2>Book Your Consultation</h2>
-          <p className="appt-subtitle">
-            Fill in your details and we'll confirm your appointment within 15 minutes.
-          </p>
+          <div className="appt-form-card">
+            <h2>Book Your Consultation</h2>
+            <p className="appt-subtitle">
+              Fill in your details and we'll confirm your appointment within 15 minutes.
+            </p>
 
-          <form onSubmit={handleSubmit}>
-            <div className="appt-grid">
+            <form onSubmit={handleSubmit}>
+              <div className="appt-grid">
 
-              <div className="appt-field">
-                <label>Full Name *</label>
-                <input
-                  name="patient_name"
-                  value={form.patient_name}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+                <div className="appt-field">
+                  <label>Full Name *</label>
+                  <input
+                    name="patient_name"
+                    value={form.patient_name}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
 
-              <div className="appt-field">
-                <label>Phone *</label>
-                {/* <input
-                  name="phone"
-                  value={form.phone}
-                  onChange={(e) => {
-                    const value = e.target.value.replace(/\D/g, ""); // only numbers
-                    if (value.length <= 10) {
-                      setForm({ ...form, phone: value });
-                    }
-                  }}
-                  placeholder="Phone (10 digits)"
-                  required
-                /> */}
+                <div className="appt-field">
+                  <label>Phone *</label>
+                  <input
+                    name="phone"
+                    value={form.phone}
+                    onChange={handleChange}
+                    onInput={(e) => {
+                      let value = e.target.value.replace(/\D/g, "");
+                      if (value.length > 10) {
+                        const audio = new Audio("/Sounds/phone.mp3");
+                        audio.play();
+                        value = value.slice(0, 10);
+                      }
+                      e.target.value = value;
+                    }}
+                    placeholder="Phone (10 digits)"
+                    required
+                  />
+                </div>
 
-                {/* For extra Sounds */}
-                <input
-                  name="phone"
-                  value={form.phone}
-                  onChange={handleChange}
-                  onInput={(e) => {
-                    let value = e.target.value.replace(/\D/g, "");
-                    if (value.length > 10) {
-                      // 🔊 play sound
-                      const audio = new Audio("/Sounds/phone.mp3");
-                      audio.play();
-                      // cut back to 10 digits
-                      value = value.slice(0, 10);
-                    }
-                    e.target.value = value;
-                  }}
-                  placeholder="Phone (10 digits)"
-                  required
-                />
-              </div>
+                {/* ✅ EMAIL FIXED */}
+                <div className="appt-field">
+                  <label>Email *</label>
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="example@gmail.com"
+                    pattern=".+@gmail\.com"
+                    title="Only Gmail addresses allowed"
+                    value={form.email}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
 
-              {/* <div className="appt-field">
-                <label>Date of Birth *</label>
-                <input
-                  type="date"
-                  name="dob"
-                  value={form.dob}
-                  onChange={handleChange}
-                  required
-                />
-              </div> */}
+                <input type="hidden" value={form.age} />
 
-              {/* Hidden age (important for backend) */}
-              <input type="hidden" value={form.age} />
-
-              <div className="appt-field">
-                <label>Doctor *</label>
-                <select
-                  name="doctor_name"
-                  value={form.doctor_name}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Select Doctor</option>
-                  {doctors.map((doc, i) => (
-                    <option key={i} value={doc}>{doc}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="appt-field">
-                <label>Date *</label>
-                <input
-                  type="date"
-                  name="date"
-                  min={new Date().toISOString().split("T")[0]}
-                  value={form.date}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className="appt-field full">
-                <label>Time *</label>
-                <select
-                  name="time_value"
-                  value={form.time_value}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Select Time</option>
-                  {getAvailableTimeSlots()
-                    .filter(slot => !bookedSlots.includes(slot))
-                    .map((slot, i) => (
-                      <option key={i} value={slot}>{slot}</option>
+                <div className="appt-field">
+                  <label>Doctor *</label>
+                  <select
+                    name="doctor_name"
+                    value={form.doctor_name}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="">Select Doctor</option>
+                    {doctors.map((doc, i) => (
+                      <option key={i} value={doc}>{doc}</option>
                     ))}
-                </select>
+                  </select>
+                </div>
+
+                <div className="appt-field">
+                  <label>Date *</label>
+                  <input
+                    type="date"
+                    name="date"
+                    min={new Date().toISOString().split("T")[0]}
+                    value={form.date}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                <div className="appt-field full">
+                  <label>Time *</label>
+                  <select
+                    name="time_value"
+                    value={form.time_value}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="">Select Time</option>
+                    {getAvailableTimeSlots()
+                      .filter(slot => !bookedSlots.includes(slot))
+                      .map((slot, i) => (
+                        <option key={i} value={slot}>{slot}</option>
+                      ))}
+                  </select>
+                </div>
+
+                <div className="appt-field full">
+                  <label>Address</label>
+                  <textarea
+                    name="address"
+                    value={form.address}
+                    onChange={handleChange}
+                  />
+                </div>
+
               </div>
 
-              <div className="appt-field full">
-                <label>Address</label>
-                <textarea
-                  name="address"
-                  value={form.address}
-                  onChange={handleChange}
-                />
-              </div>
+              <button type="submit" className="appt-submit" disabled={loading}>
+                {loading ? "Booking..." : "Confirm Appointment →"}
+              </button>
+            </form>
+          </div>
 
+          <div className="appt-side">
+            <div className="appt-info-card">
+              <h3>Quick Confirmation</h3>
+              <p>Get confirmation within 15 minutes.</p>
             </div>
 
-            <button type="submit" className="appt-submit" disabled={loading}>
-              {loading ? "Booking..." : "Confirm Appointment →"}
-            </button>
-          </form>
-        </div>
+            <div className="appt-info-card">
+              <h3>Secure</h3>
+              <p>Your data is safe and encrypted.</p>
+            </div>
 
-        {/* SIDE CARDS */}
-        <div className="appt-side">
-          <div className="appt-info-card">
-            <h3>Quick Confirmation</h3>
-            <p>Get confirmation within 15 minutes.</p>
+            <div className="appt-info-card">
+              <h3>Support</h3>
+              <p>Get instant updates on WhatsApp.</p>
+            </div>
           </div>
 
-          <div className="appt-info-card">
-            <h3>Secure</h3>
-            <p>Your data is safe and encrypted.</p>
-          </div>
-
-          <div className="appt-info-card">
-            <h3>Support</h3>
-            <p>Get instant updates on WhatsApp.</p>
-          </div>
-        </div>
         </div>
       </div>
     </section>
